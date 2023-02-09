@@ -1,11 +1,8 @@
 beforeEach(() => {
-  cy.visit('http://localhost:1234/')
+  cy.visit('/')
 });
 
 describe('movie service application', () => {
-  it('passes', () => {
-    cy.visit('http://localhost:1234/')
-  });
 
   it('should show search form', () => {
     cy.get('#searchForm').should('be.visible')
@@ -23,22 +20,31 @@ describe('movie service application', () => {
     cy.get('button').should('be.visible').click()
   });
 
+describe('searching for movies', () => {
 
-  describe('should show no result if input is less than three characters', () => {
-
-  it('should show no result if input is two characters', () => {
+  it('should show no result if input is less than three characters', () => {
     cy.get('input').type('he')
     cy.get('button').click()
     cy.get('p').should('have.text', 'Inga sökresultat att visa')
   });
 
-  it('should show no result if input is more than three characters', () => {
-    cy.get('input').type('hello')
-    cy.get('button').click()
-    cy.get('p').should('not.have.text', 'Inga sökresultat att visa')
+});
+
+describe('Tests for when movie is found', () => {
+
+  it('Should create correct elements', () => {
+    cy.get('input').type('The Matrix');
+
+    cy.get('form').should('have.id', 'searchForm').and('exist');
+    cy.get('form').submit();
+
+    cy.get('div.movie').should('exist');
+    cy.get('div.movie > h3').should('exist');
+    cy.get('div.movie > h3').contains('The Matrix').should('exist');
+    cy.get('div.movie > img').should('exist');
   });
 
-  });
+});
 
 });
 
